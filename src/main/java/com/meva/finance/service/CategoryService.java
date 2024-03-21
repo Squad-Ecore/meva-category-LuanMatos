@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -24,7 +23,6 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    @Transactional
     public ResponseEntity<?> getCategoryByExtract(String description) {
         // Remover palavras com menos de 3 letras
         description = removeSmallWords(description);
@@ -37,12 +35,12 @@ public class CategoryService {
             Optional<SubCategory> optionalSubCategory = Optional.ofNullable(subCategoryRepository.findByDescriptionIgnoreCase(palavra));
 
             if (optionalSubCategory.isPresent()) {
-                return ResponseEntity.ok(optionalSubCategory.get().getCategory());
+                return ResponseEntity.ok(optionalSubCategory.get().getCategory().getCategory());
             }
         }
 
         Category category = categoryRepository.findByDescriptionIgnoreCase("NÃO_CATEGORIZADO");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(category);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(category.getCategory());
     }
 
     //Método responsável por remover palavras com menos de 3 letras
