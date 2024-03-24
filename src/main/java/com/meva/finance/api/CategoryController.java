@@ -1,5 +1,6 @@
 package com.meva.finance.api;
 
+import com.meva.finance.dto.CategoryDto;
 import com.meva.finance.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CategoryController {
     }
 
     @GetMapping("/getCategoryByExtract/{description}")
-    public ResponseEntity<?> searchByCpf(@PathVariable String description) {
+    public ResponseEntity<CategoryDto> searchByCpf(@PathVariable String description) {
         return categoryService.getCategoryByExtract(description);
     }
 }

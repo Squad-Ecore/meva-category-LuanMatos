@@ -1,5 +1,6 @@
 package com.meva.finance.service;
 
+import com.meva.finance.dto.CategoryDto;
 import com.meva.finance.model.Category;
 import com.meva.finance.model.SubCategory;
 import com.meva.finance.repository.CategoryRepository;
@@ -23,7 +24,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public ResponseEntity<?> getCategoryByExtract(String description) {
+    public ResponseEntity<CategoryDto> getCategoryByExtract(String description) {
         // Remover palavras com menos de 3 letras
         description = removeSmallWords(description);
 
@@ -35,12 +36,14 @@ public class CategoryService {
             Optional<SubCategory> optionalSubCategory = Optional.ofNullable(subCategoryRepository.findByDescriptionIgnoreCase(palavra));
 
             if (optionalSubCategory.isPresent()) {
-                return ResponseEntity.ok(optionalSubCategory.get().getCategory().getCategory());
+                CategoryDto categoryDto = CategoryDto.fromCategory(optionalSubCategory.get().getCategory());
+                return ResponseEntity.ok(categoryDto);
             }
         }
 
         Category category = categoryRepository.findByDescriptionIgnoreCase("NÃO_CATEGORIZADO");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(category.getCategory());
+        CategoryDto categoryDto = CategoryDto.fromCategory(category);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(categoryDto);
     }
 
     //Método responsável por remover palavras com menos de 3 letras
