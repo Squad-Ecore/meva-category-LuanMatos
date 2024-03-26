@@ -21,7 +21,7 @@ public class CategoryController {
     }
 
     @GetMapping("/getCategoryByExtract/{description}")
-    public ResponseEntity<CategoryDto> searchByCpf(@PathVariable String description) {
+    public ResponseEntity<CategoryDto> getCategoryByExtract(@PathVariable String description) {
         return categoryService.getCategoryByExtract(description);
     }
 }
